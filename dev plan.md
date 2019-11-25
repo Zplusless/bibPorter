@@ -4,7 +4,10 @@
 
 ## 2. bib check
 
-检查bib文件中各个条目是否格式正确，是否缺项目
+	1. 检查bib文件中各个条目是否格式正确
+ 	2. 是否缺项目
+ 	3. 作者是否为全名
+ 	4. 是否包含in proceedings of 
 
 ## 3. bib generate
 
