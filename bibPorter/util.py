@@ -19,6 +19,8 @@ def modify_bib(bibfile):
     with open(bibfile.replace('.bib', '_modified.bib'), 'w', encoding='utf8') as bf_out:
         bf_out.writelines(biblines)
 
+# 待增加bibkey遍历功能
+
 if __name__ == "__main__":
     bibfile='../bib/test.bib'
     modify_bib(bibfile)
