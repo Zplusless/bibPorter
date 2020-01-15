@@ -32,9 +32,52 @@ def get_bibkeys(texfile:str):
     bibkeys=[]
     bibfile=''
     
+    with open(texfile, 'r', encoding='utf8') as tf:
+        lines = tf.readlines()
+
+    jump_line = False #标记跨行的cite引用
+    for line in lines:
+        # 查找cite key
+        if r'\cite' in line:
+            print(line)
+            re_item = re.match(r'.*\\cite\{(.*)\}.*', line)
+            if re_item:
+                keys = re_item.group(1).replace(' ','').split(',')    
+                print(keys)
+                bibkeys.extend(keys)
+            else:
+                jump_line=True
+                re_item = re.match(r'.*\\cite\{(.*)$', line) 
+                if re_item:
+                    keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',')
+                    print(keys)
+                    bibkeys.extend(keys)
+                    continue # 本行处理完，进入下一行，处理跨行的key
+                else:
+                    raise Exception('跨行匹配错误')
+        if jump_line:
+            if '}' in line:
+                jump_line = False
+                re_item = re.match(r'^(.*)\}.*', line) 
+                if re_item:
+                    keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',') 
+                    print(keys)
+                    bibkeys.extend(keys)
+            else: #不含}的跨行，只包含key
+                keys = line.replace(' ','').replace('\n','').replace('\r','').split(',')  
+                print(keys)
+                bibkeys.extend(keys)
+
+
+        # 查找bib文件名
+
+    bibkeys = set(bibkeys)    
+    if '' in bibkeys:
+        bibkeys.remove('')
     return bibkeys, bibfile
 
 
 if __name__ == "__main__":
-    bibfile='../bib/test.bib'
-    modify_bib(bibfile)
+    texfile='test/ieee/main.tex'
+    bibkeys, bibfile = get_bibkeys(texfile)
+    print('\n\n\n\n==========\n', bibkeys, bibfile)
