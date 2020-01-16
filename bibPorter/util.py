@@ -39,18 +39,18 @@ def get_bibkeys(texfile:str):
     for line in lines:
         # 查找cite key
         if r'\cite' in line:
-            print(line)
+            print(line, end='')
             re_item = re.match(r'[^%]*\\cite\{(.*)\}.*', line)
             if re_item:
                 keys = re_item.group(1).replace(' ','').split(',')    
-                print(keys)
+                print(keys, '\n')
                 bibkeys.extend(keys)
             else:
                 re_item = re.match(r'[^%]*\\cite\{(.*)$', line) 
                 if re_item:
                     jump_line=True # 后面有跨行的key
                     keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',')
-                    print(keys)
+                    print(keys, '\n')
                     bibkeys.extend(keys)
                     continue # 本行处理完，进入下一行，处理跨行的key
                 else:
@@ -61,7 +61,7 @@ def get_bibkeys(texfile:str):
                 re_item = re.match(r'^([^%]*)\}.*', line) 
                 if re_item:
                     keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',') 
-                    print(keys)
+                    print(keys, '\n')
                     bibkeys.extend(keys)
             else: #不含}的跨行，只包含key
                 re_item = re.match(r'([^%]*)%?.*', line)
@@ -69,8 +69,10 @@ def get_bibkeys(texfile:str):
                 print(keys)
                 bibkeys.extend(keys)
 
-
         # 查找bib文件名
+        re_item=re.match(r'^\\bibliography\{(.*)\}', line)
+        if re_item:
+            bibfile=re_item.group(1)+'.bib'
 
     bibkeys = set(bibkeys)    
     if '' in bibkeys:
