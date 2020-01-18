@@ -24,20 +24,27 @@ bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路�
 # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
 output_bib = args.output if args.output else bib_name
 
+# 从修改过的bib文件中载入，用于处理
 with open(originfile, encoding='utf8') as b_file:
     bibdata = bp.load(b_file)
 
-# print(bibdata.entries)
+print(bibdata.entries[1])
 
 # 对bib库进行格式处理
+bibdata_out = bp.bibdatabase.BibDatabase()
 for d in bibdata.entries:
-    if 'file' in d.keys():
-        del d['file']
-    if 'keywords' in d.keys():
-        del d['keywords']
+    # if 'file' in d.keys():
+    #     del d['file']
+    # if 'keywords' in d.keys():
+    #     del d['keywords']
+    if d['ID'] in bib_keys:
+        bibdata_out.entries.append(d)
+        print(d['ID'])
+        # print(bibdata_out)
 
+print(bibdata_out)
 with open(output_bib, 'w', encoding='utf8') as bib_write:
-    bp.dump(bibdata, bib_write)
+    bp.dump(bibdata_out, bib_write)
 
 
 
