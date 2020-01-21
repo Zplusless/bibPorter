@@ -43,7 +43,6 @@ def main():
                         default=config_dict['config'])
     args = parser.parse_args()
 
-    print(args.config)
 
     # 如果确认写入配置
     if args.config == 'yes':
@@ -53,9 +52,11 @@ def main():
             config_dict['output'] = args.output
             config_dict['config'] = args.config
             json.dump(config_dict, f)
+            print('Configure has been writen into: \n{}'.format(config_file), '\n===========================')
     else:
         if os.path.exists(config_file):
             os.remove(config_file)
+            print('Configure file has been deleted', '\n===========================')
             
     # print(type(args))
     
