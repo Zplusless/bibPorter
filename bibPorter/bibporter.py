@@ -19,7 +19,7 @@ def main():
         config_dict['input'] = None
         config_dict['tex'] = None
         config_dict['output'] = None
-        config_dict['config'] = True
+        config_dict['config'] = 'yes'
 
     # parser = argparse.ArgumentParser()
     parser=GooeyParser(description='Pick bib keys from .tex file and generate bib file')
@@ -35,16 +35,18 @@ def main():
                         help='the path of bib file you are using for latex. By default the current path', 
                         default = config_dict['output'],
                         widget="FileChooser")
-    parser.add_argument('-s', "--config",                        
-                        help="remember the config, if False, the config file will be deleted", 
-                        action="store_true", 
+    parser.add_argument("config",                        
+                        help="remember the config, if no, the config file will be deleted", 
+                        # action="store_true", 
+                        # widget='CheckBox',
+                        choices = ['yes', 'no'],
                         default=config_dict['config'])
     args = parser.parse_args()
 
     print(args.config)
 
     # 如果确认写入配置
-    if args.config:
+    if args.config == 'yes':
         with open(config_file, 'w', encoding='utf8') as f:
             config_dict['input'] = args.input
             config_dict['tex'] = args.tex
