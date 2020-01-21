@@ -88,10 +88,10 @@ def get_tex_file(path:str):
             no_match = False
             return file  # 返回tex文件名字
     if no_match:
-        raise Exception('no tex file at ----> '+path)
-
+        raise FileNotFoundError('no tex file at ----> '+path)
 
 if __name__ == "__main__":
     texfile='test/ieee/main.tex'
     bibkeys, bibfile = get_bibinfo(texfile)
     print('\n\n\n\n==========\n', bibkeys, bibfile)
+    get_tex_file('test/')

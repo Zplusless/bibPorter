@@ -2,51 +2,87 @@ import bibtexparser as bp
 import os
 import argparse
 from util import modify_bib, get_bibinfo, get_tex_file
+from gooey import Gooey, GooeyParser
+import json
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--input', help='the path of origin bib file expoted by zotero', required=True)
-parser.add_argument('-o', '--output', help='the path of bib file you are using for latex. If not given, bibPorter will use the file name in .tex file')
-parser.add_argument('-t', '--tex', help='the path of tex file')
-args = parser.parse_args()
+@Gooey(program_name='BibPorter')
+def main():
 
-# 将zotero输出的源文件修改，改变月份
-originfile = modify_bib(args.input)
-# 指定tex源文件的路径
-local_dir = os.getcwd()
-# print('---->'+local_dir)
-tex_file = args.tex if args.tex else os.path.join(local_dir, get_tex_file(local_dir))
-# 获取bibkey和bib文件
-bib_keys, bib_name = get_bibinfo(tex_file)
-# 分离texfile的路径和文件
-tex_dir, _ = os.path.split(tex_file)
-bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
+    # 读取配置文件
+    local_dir =  os.getcwd() # 指定tex源文件的路径
+    config_file = os.path.join(local_dir, 'bibporter_config.json')
+    config_dict = {}
+    if os.path.exists(config_file):
+        with open(config_file, 'r', encoding='utf8') as f:
+            config_dict = json.load(f)
+    else:
+        config_dict['input'] = None
+        config_dict['tex'] = None
+        config_dict['output'] = None
+        config_dict['config'] = True
 
-# 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
-output_bib = args.output if args.output else bib_name
+    # parser = argparse.ArgumentParser()
+    parser=GooeyParser(description='Pick bib keys from .tex file and generate bib file')
+    parser.add_argument('input', 
+                        help='the path of origin bib file expoted by zotero', 
+                        default=config_dict['input'], 
+                        widget="FileChooser")
+    parser.add_argument('-t', '--tex', 
+                        help='the path of tex file', 
+                        default=config_dict['tex'], 
+                        widget="FileChooser")
+    parser.add_argument('-o', '--output', 
+                        help='the path of bib file you are using for latex. By default the current path', 
+                        default = config_dict['output'],
+                        widget="FileChooser")
+    parser.add_argument('-s', "--config",                        
+                        help="remember the config, if False, the config file will be deleted", 
+                        action="store_true", 
+                        default=config_dict['config'])
+    args = parser.parse_args()
 
-# 从修改过的bib文件中载入，用于处理
-with open(originfile, encoding='utf8') as b_file:
-    bibdata = bp.load(b_file)
+    print(args.config)
 
-print(bibdata.entries[1])
+    # 如果确认写入配置
+    if args.config:
+        with open(config_file, 'w', encoding='utf8') as f:
+            config_dict['input'] = args.input
+            config_dict['tex'] = args.tex
+            config_dict['output'] = args.output
+            config_dict['config'] = args.config
+            json.dump(config_dict, f)
+    else:
+        if os.path.exists(config_file):
+            os.remove(config_file)
+            
+    # print(type(args))
+    
+    originfile = modify_bib(args.input) # 将zotero输出的源文件修改，改变月份
+    tex_file = args.tex if args.tex else os.path.join(local_dir, get_tex_file(local_dir))   # 如未给出，则在当前路径中寻找tex文件
+    bib_keys, bib_name = get_bibinfo(tex_file)  # 获取bibkey和bib文件
+    tex_dir, _ = os.path.split(tex_file)    # 分离texfile的路径和文件
+    bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
+    output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
 
-# 对bib库进行格式处理
-bibdata_out = bp.bibdatabase.BibDatabase()
-for d in bibdata.entries:
-    # if 'file' in d.keys():
-    #     del d['file']
-    # if 'keywords' in d.keys():
-    #     del d['keywords']
-    if d['ID'] in bib_keys:
-        bibdata_out.entries.append(d)
-        print(d['ID'])
-        # print(bibdata_out)
 
-print(bibdata_out)
-with open(output_bib, 'w', encoding='utf8') as bib_write:
-    bp.dump(bibdata_out, bib_write)
+    # 从修改过的bib文件中载入，用于处理
+    with open(originfile, encoding='utf8') as b_file:
+        bibdata = bp.load(b_file)
+
+    # print(bibdata.entries[1])
+
+    # 对bib库进行格式处理
+    bibdata_out = bp.bibdatabase.BibDatabase()
+    for d in bibdata.entries:
+        if d['ID'] in bib_keys:
+            bibdata_out.entries.append(d)
+            print(d['ID'])
+
+    # print(bibdata_out)
+    with open(output_bib, 'w', encoding='utf8') as bib_write:
+        bp.dump(bibdata_out, bib_write)
 
 
+if __name__ == "__main__":
+    main()
 
-
-# originfile = modify_bib(r'F:\博士学习\1.论文写作\zotero导出完整数据库.bib')
