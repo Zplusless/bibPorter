@@ -19,7 +19,7 @@ def main():
         config_dict['input'] = None
         config_dict['tex'] = None
         config_dict['output'] = None
-        config_dict['config'] = 'yes'
+        config_dict['config'] = 'no'
 
     # parser = argparse.ArgumentParser()
     parser=GooeyParser(description='Pick bib keys from .tex file and generate bib file')
