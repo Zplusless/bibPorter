@@ -4,6 +4,13 @@ import argparse
 from util import modify_bib, get_bibinfo, get_tex_file
 from gooey import Gooey, GooeyParser
 import json
+import sys
+
+
+# 直接输出，避免stdout被python缓存---->Gooey用pyinstaller打包的要求
+# nonbuffered_stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+# sys.stdout = nonbuffered_stdout
+
 
 @Gooey(program_name='BibPorter')
 def main():
