@@ -41,7 +41,7 @@ def main():
     parser.add_argument('-o', '--output', 
                         help='the path of bib file you are using for latex. By default the current path', 
                         default = config_dict['output'],
-                        widget="FileChooser")
+                        widget="DirChooser")
     parser.add_argument("config",                        
                         help="remember the config, if no, the config file will be deleted", 
                         # action="store_true", 
