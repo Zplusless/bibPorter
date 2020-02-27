@@ -82,6 +82,7 @@ def main():
     # print(bibdata.entries[1])
 
     # 对bib库进行格式处理
+    # 此处效率低，应该直接从大库里读bib id，存在则append，否则，报错
     bibdata_out = bp.bibdatabase.BibDatabase()
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
