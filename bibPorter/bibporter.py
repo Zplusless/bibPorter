@@ -4,8 +4,6 @@ import os
 import argparse
 from util import modify_bibs, get_bibinfo, get_tex_file
 import requests
-import json
-import sys
 
 ZOTERO_API='http://127.0.0.1:23119/better-bibtex/library?/1/library.bibtex'
 
