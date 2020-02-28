@@ -1,6 +1,7 @@
 __pycache__
 build
 dist
+*.exe
 *.aux
 *.bbl
 *.blg
