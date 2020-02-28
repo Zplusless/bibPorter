@@ -87,7 +87,10 @@ def main():
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
             bibdata_out.entries.append(d)
-            print(d['ID'])
+            print('成功导入---->'+d['ID'])
+            bib_keys.remove(d['ID'])
+    bibkey_not_found = '\n'.join(bib_keys)
+    print('以下导入失败：\n', bibkey_not_found)
 
     # print(bibdata_out)
     with open(output_bib, 'w', encoding='utf8') as bib_write:
