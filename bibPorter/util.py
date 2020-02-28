@@ -48,22 +48,32 @@ def get_bibinfo(texfile:str):
     for line in lines:
         # 查找cite key
         if r'\cite' in line:
-            # print(line, end='')
-            re_item = re.match(r'[^%]*\\cite\{(.*)\}.*', line)
-            if re_item:
-                keys = re_item.group(1).replace(' ','').split(',')    
-                # print(keys, '\n')
-                bibkeys.extend(keys)
-            else:
-                re_item = re.match(r'[^%]*\\cite\{(.*)$', line) 
-                if re_item:
-                    jump_line=True # 后面有跨行的key
-                    keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',')
+            no_double_flag = False  # 没有大括号完整的\cite
+            no_single_flag = False  # 没有单一大括号的\cite
+            
+            #  解决所有左右大括号完整的bibkey
+            re_items = re.findall(r'\\cite\{([^}]*)\}', line)  # 得到一个list，每个元素是\cite后面大括号内的完整内容
+            if re_items: 
+                for item in re_items:
+                    keys = item.replace(' ','').split(',')    
                     # print(keys, '\n')
                     bibkeys.extend(keys)
-                    continue # 本行处理完，进入下一行，处理跨行的key
-                else:
-                    raise Exception('跨行匹配错误')
+            else:
+                no_double_flag = True
+
+            # 解决出现在行最后，可能跨行的bibkey
+            re_item = re.match(r'[^%]*\\cite\{([^}]*)$', line) # 一定要是[^}],否则可能得到从第一个\cite一直到最后
+            if re_item:
+                jump_line=True # 后面有跨行的key
+                keys = re_item.group(1).replace(' ','').replace('\n','').replace('\r','').split(',')
+                # print(keys, '\n')
+                bibkeys.extend(keys)
+                continue # 本行处理完，进入下一行，处理跨行的key
+            else:
+                no_single_flag = True
+            #两种都没找到，一定有错误
+            if no_double_flag and no_single_flag:
+                raise Exception(r'在有\cite的行内，未找到bibkey')
         if jump_line:
             if '}' in line:
                 jump_line = False
