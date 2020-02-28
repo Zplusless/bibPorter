@@ -23,6 +23,15 @@ def modify_bib(bibfile):
 
     return outputfile
 
+def modify_bibs(bib_str:str):
+    biblines = bib_str.split('\n')
+
+    for i, line in enumerate(biblines):
+        if 'month' in line:
+            biblines[i] = modify_month(line)
+
+    return '\n'.join(biblines)
+
 # 待增加bibkey遍历功能
 def get_bibinfo(texfile:str):
     '''

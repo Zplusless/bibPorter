@@ -11,8 +11,8 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": [
-                "-i", "test/zotero导出完整数据库.bib",
-                "-t", "test/ieee/main.tex" 
+                "-o", "test/ieee/reference_test.bib",
+                "-t", "test/ieee/bibPorter_test.tex" 
             ]
         }
     ]
