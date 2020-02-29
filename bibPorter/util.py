@@ -109,6 +109,27 @@ def get_tex_file(path:str):
     if no_match:
         raise FileNotFoundError('no tex file at ----> '+path)
 
+def check_entity(entity:dict) -> set:
+    INPROCEDINGS = {'title', 'booktitle','author', 'year', 'month', 'pages'}
+    ARTICLE_JOURNAL = {'title', 'journal', 'author', 'year', 'month', 'volume','pages', 'number'}
+    ARTICLE_ARXIV = {'title', 'author', 'year', 'month', 'journal'}
+    entity_type = entity['ENTRYTYPE']
+    entity_keys = entity.keys()
+
+    # 对于确实缺信息的，在zotero文献的其它一栏写入complete,免去检查
+    if 'note' in entity_keys and entity['note'] == 'complete':
+        return None 
+
+    if entity_type =='article':
+        if 'eprint' in entity_keys or 'arXiv' in entity['journal']:
+            return ARTICLE_ARXIV-entity_keys  # 检查arXiv的论文
+        else:
+            return ARTICLE_JOURNAL-entity_keys # 检查期刊论文
+    if entity_type == 'inproceedings':
+        return INPROCEDINGS-entity_keys
+
+
+
 if __name__ == "__main__":
     texfile='test/ieee/main.tex'
     bibkeys, bibfile = get_bibinfo(texfile)
