@@ -2,8 +2,10 @@ import bibtexparser as bp
 from bibtexparser.bparser import BibTexParser
 import os
 import argparse
-from util import modify_bibs, get_bibinfo, get_tex_file
+from util import modify_bibs, get_bibinfo, get_tex_file, check_entity
 import requests
+import sys
+import re
 
 ZOTERO_API='http://127.0.0.1:23119/better-bibtex/library?/1/library.bibtex'
 
@@ -27,11 +29,16 @@ def main():
 
 
     # 从zotero的API中读取数据
-    r = requests.get(ZOTERO_API)
+    try:
+        r = requests.get(ZOTERO_API)
+    except requests.exceptions.ConnectionError:
+        print('zotero未启动，获取数据库失败')
+        sys.exit(1)
     if r.status_code == 200:
         print('成功从zotero读取数据')
     else:
         raise Exception('未能从zotero读取数据，状态码：{}'.format(r.status_code))
+        sys.exit(1)
     r.encoding = 'utf-8'
     bib_str = modify_bibs(r.text)
 
@@ -42,7 +49,9 @@ def main():
     bibParser.homogenise_fields = True
     bibdata = bp.loads(bib_str, bibParser)
 
-    # print(bibdata.entries[1])
+    # for i in range(100,120):
+    #     print(bibdata.entries[i])
+    #     print(type(bibdata.entries[i]), '\n')
 
     # 对bib库进行格式处理
     # 此处效率低，应该直接从大库里读bib id，存在则append，否则，报错
@@ -50,7 +59,9 @@ def main():
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
             bibdata_out.entries.append(d)
-            print('成功导入---->'+d['ID'])
+            entity_check = check_entity(d)
+            entity_check_consequence = '---->题目：'+ re.sub(r'[{}]','', d['title']) +' 缺少字段：'+ str(entity_check) if entity_check else ''
+            print('成功导入---->'+d['ID'], entity_check_consequence)
             bib_keys.remove(d['ID'])
     bibkey_not_found = '\n'.join(bib_keys)
     print('以下导入失败：\n', bibkey_not_found)
