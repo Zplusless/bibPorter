@@ -5,7 +5,11 @@ import argparse
 from util import modify_bibs, get_bibinfo, get_tex_file, check_entity
 import requests
 import sys
+import io
 import re
+
+# 强制设置输出编码
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 
 ZOTERO_API='http://127.0.0.1:23119/better-bibtex/library?/1/library.bibtex'
 
