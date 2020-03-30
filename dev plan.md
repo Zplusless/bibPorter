@@ -3,6 +3,7 @@
 1. 写作时候仅插入bibkey，可以用快速拷贝，也可以用cite as you write的API，详见https://retorque.re/zotero-better-bibtex/citing/cayw/
 2. bibPorter变量tex文件，利用pull export的API拉取全部bib，详见https://retorque.re/zotero-better-bibtex/exporting/pull/
 3. 从全部bib中筛选出需要的，生成.bib文件
+4. 对bib文件中的entity进行检查，筛选遗漏项目，整理缩写等， 参考http://abbrv.jabref.org/  https://blog.csdn.net/OpenSourceSDR/article/details/51907111
 
 
 
