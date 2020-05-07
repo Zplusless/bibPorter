@@ -46,6 +46,12 @@ def get_bibinfo(texfile:str):
 
     jump_line = False #标记跨行的cite引用
     for line in lines:
+        if r'%' in line:
+            line = line.replace('\%', '_')
+            line = line.split('%')[0]  # 利用%分割句子，第一部分就是非注释的部分
+            if line:
+                print(line)
+
         # 查找cite key
         if r'\cite' in line:
             no_double_flag = False  # 没有大括号完整的\cite
