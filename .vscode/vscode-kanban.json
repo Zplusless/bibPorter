@@ -5,13 +5,14 @@
       "assignedTo": {
         "name": "lyz"
       },
+      "category": "bib",
       "creation_time": "2020-06-08T10:03:55.771Z",
       "description": {
         "content": "当tex文件末尾关联了多个bib文件时，如何取舍",
         "mime": "text/markdown"
       },
       "details": {
-        "content": "1. 默认只输出到第一个文件\n2. 可以自定义输出文件",
+        "content": "- [] 默认只输出到第一个文件\n- [] 如果存在多个文件,则会检测未插入第一个文件的引用是否在其它bib里面\n- [] 可以自定义输出文件\n- [] 文件名中带`_fix`的默认不碰\n",
         "mime": "text/markdown"
       },
       "id": "1",
