@@ -49,8 +49,8 @@ def get_bibinfo(texfile:str):
         if r'%' in line:
             line = line.replace('\%', '_')
             line = line.split('%')[0]  # 利用%分割句子，第一部分就是非注释的部分
-            if line:
-                print(line)
+            # if line:
+            #     print(line)
 
         # 查找cite key
         if r'\cite' in line:

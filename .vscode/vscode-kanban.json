@@ -1,0 +1,68 @@
+{
+  "done": [],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "lyz"
+      },
+      "creation_time": "2020-06-08T10:03:55.771Z",
+      "description": {
+        "content": "当tex文件末尾关联了多个bib文件时，如何取舍",
+        "mime": "text/markdown"
+      },
+      "details": {
+        "content": "1. 默认只输出到第一个文件\n2. 可以自定义输出文件",
+        "mime": "text/markdown"
+      },
+      "id": "1",
+      "prio": 0,
+      "references": [],
+      "title": "多bib文件如何工作"
+    }
+  ],
+  "testing": [],
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "lyz"
+      },
+      "creation_time": "2020-06-08T10:06:13.966Z",
+      "description": {
+        "content": "如白皮书等，能够按照IEEE的标准格式输出，能够保存url等项目",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "prio": 0,
+      "references": [],
+      "title": "兼容会议、期刊之外的其他种类文档"
+    },
+    {
+      "assignedTo": {
+        "name": "lyz"
+      },
+      "creation_time": "2020-06-08T10:07:52.862Z",
+      "description": {
+        "content": "指定与zotero交互时导出的格式",
+        "mime": "text/markdown"
+      },
+      "id": "4",
+      "prio": 0,
+      "references": [],
+      "title": "自定义bib输出格式"
+    },
+    {
+      "assignedTo": {
+        "name": "lyz"
+      },
+      "creation_time": "2020-06-08T10:07:11.894Z",
+      "description": {
+        "content": "能够自己选择保留哪些项目，如url等",
+        "mime": "text/markdown"
+      },
+      "id": "3",
+      "prio": 0,
+      "references": [],
+      "title": "自定义需要的项目"
+    }
+  ]
+}
