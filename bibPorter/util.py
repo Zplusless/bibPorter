@@ -97,7 +97,8 @@ def get_bibinfo(texfile:str):
         # 查找bib文件名
         re_item=re.match(r'^\\bibliography\{(.*)\}', line)
         if re_item:
-            bibfile=re_item.group(1)+'.bib'
+            file_names = re_item.group(1).split(',')
+            bibfile=file_names[0]+'.bib'
 
     bibkeys = set(bibkeys)    
     if '' in bibkeys:
