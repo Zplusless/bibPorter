@@ -26,9 +26,23 @@ def modify_bib(bibfile):
 def modify_bibs(bib_str:str):
     biblines = bib_str.split('\n')
 
+
+    # none_lines = []
+
     for i, line in enumerate(biblines):
         if 'month' in line:
             biblines[i] = modify_month(line)
+
+        if 'file :' in line:
+            biblines[i] = ''
+
+        # if not line and line!='':
+        #     none_lines.append(i)
+        #     biblines[i] = ''
+
+    # debug_ = biblines[4320:4330]
+    # print(debug_)
+    # print(type(debug_))
 
     return '\n'.join(biblines)
 
