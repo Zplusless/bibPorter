@@ -64,6 +64,19 @@
       "prio": 0,
       "references": [],
       "title": "自定义需要的项目"
+    },
+    {
+      "assignedTo": {
+        "name": "MonsterZ"
+      },
+      "creation_time": "2020-08-26T07:18:30.821Z",
+      "description": {
+        "content": "zotero://open-pdf/library/items\n\nzotero://select/library/items",
+        "mime": "text/markdown"
+      },
+      "id": "5",
+      "references": [],
+      "title": "zotero未启动的时候利用url scheme调用启动"
     }
   ]
 }

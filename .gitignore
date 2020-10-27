@@ -1,5 +1,6 @@
 __pycache__
 build
+build_for_VM
 dist
 *.exe
 *.aux
@@ -15,3 +16,7 @@ dist
 *.fdb_latexmk
 .ropeproject
 bibporter_config.json
+bibPorter/bibporter.spec
+test/ieee/reference.bib
+.vscode/settings.json
+[代码]obsidian中提到的zotero题录获取.url

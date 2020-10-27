@@ -46,6 +46,9 @@ def main():
     r.encoding = 'utf-8'
     bib_str = modify_bibs(r.text)
 
+    # with open('./bib_str.txt', 'w', encoding='utf8') as out_bib:
+    #     out_bib.write(bib_str)
+
 
     # 构建BibtexParser
     bibParser = BibTexParser(common_strings=False)
@@ -68,7 +71,7 @@ def main():
             print('成功导入---->'+d['ID'], entity_check_consequence)
             bib_keys.remove(d['ID'])
     bibkey_not_found = '\n'.join(bib_keys)
-    print('以下导入失败：\n', bibkey_not_found)
+    print('以下导入失败(共{}个)：\n'.format(len(bib_keys)), bibkey_not_found)
     print('------------end---------------')
 
     # print(bibdata_out)

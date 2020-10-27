@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": [
-                "-o", "test/ieee/reference_test.bib",
+                // "-o", "test/ieee/reference_test.bib",
                 "-t", "test/ieee/bibPorter_test.tex" 
             ]
         }
