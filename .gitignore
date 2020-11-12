@@ -19,4 +19,4 @@ bibporter_config.json
 bibPorter/bibporter.spec
 test/ieee/reference.bib
 .vscode/settings.json
-[代码]obsidian中提到的zotero题录获取.url
+*.url

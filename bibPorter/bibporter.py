@@ -70,6 +70,10 @@ def main():
             entity_check_consequence = '---->题目：'+ re.sub(r'[{}]','', d['title']) +' 缺少字段：'+ str(entity_check) if entity_check else ''
             print('成功导入---->'+d['ID'], entity_check_consequence)
             bib_keys.remove(d['ID'])
+
+    # TODO
+    # 检查导入失败的是否在被引用的其它bib文件里
+    
     bibkey_not_found = '\n'.join(bib_keys)
     print('以下导入失败(共{}个)：\n'.format(len(bib_keys)), bibkey_not_found)
     print('------------end---------------')

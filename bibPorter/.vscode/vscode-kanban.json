@@ -1,0 +1,20 @@
+{
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "Zplusless"
+      },
+      "creation_time": "2020-11-12T07:37:11.049Z",
+      "description": {
+        "content": "检查是否在同路径下的其它bib文件中",
+        "mime": "text/markdown"
+      },
+      "id": "1",
+      "references": [],
+      "title": "增加对不在zotero中的bibikeys的排查"
+    }
+  ],
+  "in-progress": [],
+  "testing": [],
+  "done": []
+}
