@@ -25,9 +25,17 @@ def main():
     args = parser.parse_args()
 
     
-    tex_file = args.tex if args.tex else os.path.join(local_dir, get_tex_file(local_dir))   # 如未给出，则在当前路径中寻找tex文件
-    bib_keys, bib_name = get_bibinfo(tex_file)  # 获取bibkey和bib文件
-    tex_dir, _ = os.path.split(tex_file)    # 分离texfile的路径和文件
+    tex_files = args.tex.replace(' ', '').split(',') if args.tex else [os.path.join(local_dir, f) for f in get_tex_file(local_dir) ]  # 如未给出，则在当前路径中寻找tex文件
+    bib_keys = []
+    bib_name = None  # todo 不能处理多个bib_name,不过一般不存在这种情况，只有main.tex中会有这个命令
+    for f in tex_files:
+        key, temp_name = get_bibinfo(f)  # 获取bibkey和bib文件
+        bib_keys.extend(key)
+        if temp_name:
+            bib_name = temp_name
+            bib_dir = os.path.split(f)
+    
+    tex_dir, _ = bib_dir if args.tex else local_dir    # 分离texfile的路径和文件
     bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
     output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
 

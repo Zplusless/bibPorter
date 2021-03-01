@@ -53,7 +53,7 @@ def get_bibinfo(texfile:str):
     bib文件名由 \bibliography{reference} 命令确定
     '''
     bibkeys=[]
-    bibfile=''
+    bibfile=None
     
     with open(texfile, 'r', encoding='utf8') as tf:
         lines = tf.readlines()
@@ -122,12 +122,13 @@ def get_bibinfo(texfile:str):
 # 找到tex文件
 def get_tex_file(path:str):
     dir_list = os.listdir(path)
-    no_match = True
+    tex_files=[]
     for file in dir_list:
         if os.path.splitext(file)[1] == ".tex":
-            no_match = False
-            return file  # 返回tex文件名字
-    if no_match:
+            tex_files.append(file)
+    if tex_files:
+        return tex_files
+    else:
         raise FileNotFoundError('no tex file at ----> '+path)
 
 def check_entity(entity:dict) -> set:

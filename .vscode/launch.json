@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 // "-o", "test/ieee/reference_test.bib",
-                "-t", "test/ieee/bibPorter_test.tex" 
+                "-t", "test/ieee/bibPorter_test.tex, test/ieee/bibPorter_test2.tex" 
             ]
         }
     ]
