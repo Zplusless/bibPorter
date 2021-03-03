@@ -35,7 +35,7 @@ def main():
             bib_name = temp_name
             bib_dir = os.path.split(f)
     
-    tex_dir, _ = bib_dir if args.tex else local_dir    # 分离texfile的路径和文件
+    tex_dir = bib_dir if args.tex else local_dir    # 分离texfile的路径和文件
     bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
     output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
 
