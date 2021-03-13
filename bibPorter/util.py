@@ -6,7 +6,7 @@ def modify_month(line:str):
     re_item = re.match(' *month *= *([a-zA-Z]*)', line)
     if re_item:    
         month = re_item.group(1)
-        line=line.replace(month, '{'+month+'}')
+        line=line.replace(month, '{'+month.capitalize()+'}')
         return line
 
 def modify_bib(bibfile):
