@@ -31,11 +31,15 @@ def main():
     for f in tex_files:
         key, temp_name = get_bibinfo(f)  # 获取bibkey和bib文件
         bib_keys.extend(key)
-        if temp_name:
+        if temp_name:  # ! # bug 此处bib_dir应该有bug,中文情况下split出来的路径有问题 
             bib_name = temp_name
-            bib_dir = os.path.split(f)
+            # bib_dir = os.path.split(f)
     
-    tex_dir = bib_dir if args.tex else local_dir    # 分离texfile的路径和文件
+    if not bib_name:
+        print('bib file name not found, using reference.bib by default')
+        bib_name = 'reference.bib'
+    
+    tex_dir = os.path.split(args.tex)[0] if args.tex else local_dir    # 分离texfile的路径和文件
     bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
     output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
 
@@ -71,6 +75,9 @@ def main():
     # 对bib库进行格式处理
     # 此处效率低，应该直接从大库里读bib id，存在则append，否则，报错
     bibdata_out = bp.bibdatabase.BibDatabase()
+
+    num_all = len(bib_keys)
+
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
             bibdata_out.entries.append(d)
@@ -83,8 +90,11 @@ def main():
     # 检查导入失败的是否在被引用的其它bib文件里
     
     bibkey_not_found = '\n'.join(bib_keys)
-    print('以下导入失败(共{}个)：\n'.format(len(bib_keys)), bibkey_not_found)
+    num_not_found = len(bib_keys)
+    print('以下导入失败(共{}个)：\n'.format(num_not_found), bibkey_not_found)
     print('------------end---------------')
+
+    print('共成功导入{}个,导入失败{}个'.format(num_all-num_not_found, num_not_found))
 
     # print(bibdata_out)
     with open(output_bib, 'w', encoding='utf8') as bib_write:
