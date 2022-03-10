@@ -25,9 +25,9 @@ def main():
     args = parser.parse_args()
 
     
-    tex_files = args.tex.replace(' ', '').split(',') if args.tex else [os.path.join(local_dir, f) for f in get_tex_file(local_dir) ]  # 如未给出，则在当前路径中寻找tex文件
+    tex_files = args.tex.replace(' ', '').split(',') if args.tex else [os.path.join(local_dir, f) for f in get_tex_file(local_dir) ]  # 如未给出, 则在当前路径中寻找tex文件
     bib_keys = []
-    bib_name = None  # todo 不能处理多个bib_name,不过一般不存在这种情况，只有main.tex中会有这个命令
+    bib_name = None  # todo 不能处理多个bib_name,不过一般不存在这种情况, 只有main.tex中会有这个命令
     for f in tex_files:
         key, temp_name = get_bibinfo(f)  # 获取bibkey和bib文件
         bib_keys.extend(key)
@@ -40,20 +40,20 @@ def main():
         bib_name = 'reference.bib'
     
     tex_dir = os.path.split(args.tex)[0] if args.tex else local_dir    # 分离texfile的路径和文件
-    bib_name = os.path.join(tex_dir, bib_name) # 拼接路径，指向tex相同路径下
-    output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数，否则使用tex文件中指定的名称，放在相同路径下
+    bib_name = os.path.join(tex_dir, bib_name) # 拼接路径, 指向tex相同路径下
+    output_bib = args.output if args.output else bib_name   # 有命令行参数则选为参数, 否则使用tex文件中指定的名称, 放在相同路径下
 
 
     # 从zotero的API中读取数据
     try:
         r = requests.get(ZOTERO_API)
     except requests.exceptions.ConnectionError:
-        print('zotero未启动，获取数据库失败')
+        print('zotero is not working, get bib data failed')
         sys.exit(1)
     if r.status_code == 200:
-        print('成功从zotero读取数据')
+        print('get zotero data success!')
     else:
-        raise Exception('未能从zotero读取数据，状态码：{}'.format(r.status_code))
+        raise Exception('fail to get data from zotero, status code: {}'.format(r.status_code))
         sys.exit(1)
     r.encoding = 'utf-8'
     bib_str = modify_bibs(r.text)
@@ -73,7 +73,7 @@ def main():
     #     print(type(bibdata.entries[i]), '\n')
 
     # 对bib库进行格式处理
-    # 此处效率低，应该直接从大库里读bib id，存在则append，否则，报错
+    # 此处效率低, 应该直接从大库里读bib id, 存在则append, 否则, 报错
     bibdata_out = bp.bibdatabase.BibDatabase()
 
     num_all = len(bib_keys)
@@ -82,8 +82,8 @@ def main():
         if d['ID'] in bib_keys:
             bibdata_out.entries.append(d)
             entity_check = check_entity(d)
-            entity_check_consequence = '---->题目：'+ re.sub(r'[{}]','', d['title']) +' 缺少字段：'+ str(entity_check) if entity_check else ''
-            print('成功导入---->'+d['ID'], entity_check_consequence)
+            entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
+            print('Success---->'+d['ID'], entity_check_consequence)
             bib_keys.remove(d['ID'])
 
     # TODO
@@ -91,10 +91,10 @@ def main():
     
     bibkey_not_found = '\n'.join(bib_keys)
     num_not_found = len(bib_keys)
-    print('以下导入失败(共{}个)：\n'.format(num_not_found), bibkey_not_found)
+    print('fail to get bibkeys (total {})：\n'.format(num_not_found), bibkey_not_found)
     print('------------end---------------')
 
-    print('共成功导入{}个,导入失败{}个'.format(num_all-num_not_found, num_not_found))
+    print('Success: {}, Fail: {}'.format(num_all-num_not_found, num_not_found))
 
     # print(bibdata_out)
     with open(output_bib, 'w', encoding='utf8') as bib_write:
