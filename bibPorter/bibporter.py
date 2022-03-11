@@ -96,7 +96,8 @@ def main():
             entity_check = check_entity(d)
             entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
             print('Excluded---->'+d['ID'], entity_check_consequence)
-            bib_keys.remove(d['ID'])
+            while d['ID'] in bib_keys:
+                bib_keys.remove(d['ID'])
 
     print('--------------------\n\n')
 
@@ -108,7 +109,8 @@ def main():
             entity_check = check_entity(d)
             entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
             print('Success---->'+d['ID'], entity_check_consequence)
-            bib_keys.remove(d['ID'])
+            while d['ID'] in bib_keys:
+                bib_keys.remove(d['ID'])
 
 
     print('--------------------\n\n')
