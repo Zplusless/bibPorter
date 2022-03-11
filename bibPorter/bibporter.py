@@ -22,6 +22,8 @@ def main():
                         help='the path of tex file')
     parser.add_argument('-o', '--output', 
                         help='the path of bib file you are using for latex. By default the current path')
+    parser.add_argument('-e', '--exclude',
+                        help='a bib file in which the bibkeys will not be parsed from zotero, using reference_fix.bib by default')
     args = parser.parse_args()
 
     
@@ -78,6 +80,28 @@ def main():
 
     num_all = len(bib_keys)
 
+
+
+    # 检查导入失败的是否在被引用的其它bib文件里
+    excluded_keys = set()
+    exclude_file = args.exclude if args.exclude else "reference_fix.bib"
+    exclude_file_path = os.path.join(tex_dir, exclude_file)
+    with open(exclude_file_path) as ex_f:
+        exclude_data = bp.load(ex_f)
+    
+    for d in exclude_data.entries:
+        if d['ID'] in bib_keys:
+            # excluded_keys.add(d['ID'])
+            bibdata_out.entries.append(d)
+            entity_check = check_entity(d)
+            entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
+            print('Excluded---->'+d['ID'], entity_check_consequence)
+            bib_keys.remove(d['ID'])
+
+    print('--------------------\n\n')
+
+
+    # 爬取剩下没有在exclude_file中的bibkey
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
             bibdata_out.entries.append(d)
@@ -86,8 +110,12 @@ def main():
             print('Success---->'+d['ID'], entity_check_consequence)
             bib_keys.remove(d['ID'])
 
-    # TODO
-    # 检查导入失败的是否在被引用的其它bib文件里
+
+    print('--------------------\n\n')
+
+
+
+
     
     bibkey_not_found = '\n'.join(bib_keys)
     num_not_found = len(bib_keys)
