@@ -91,7 +91,7 @@ def main():
     
     bibkey_not_found = '\n'.join(bib_keys)
     num_not_found = len(bib_keys)
-    print('fail to get bibkeys (total {})：\n'.format(num_not_found), bibkey_not_found)
+    print('fail to get bibkeys (total {}): \n'.format(num_not_found), bibkey_not_found)
     print('------------end---------------')
 
     print('Success: {}, Fail: {}'.format(num_all-num_not_found, num_not_found))
