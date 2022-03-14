@@ -91,13 +91,17 @@ def main():
     
     for d in exclude_data.entries:
         if d['ID'] in bib_keys:
-            # excluded_keys.add(d['ID'])
-            bibdata_out.entries.append(d)
-            entity_check = check_entity(d)
-            entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
-            print('Excluded---->'+d['ID'], entity_check_consequence)
-            while d['ID'] in bib_keys:
-                bib_keys.remove(d['ID'])
+            try:
+                # excluded_keys.add(d['ID'])
+                bibdata_out.entries.append(d)
+                entity_check = check_entity(d)
+                entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
+                print('Excluded---->'+d['ID'], entity_check_consequence)
+                while d['ID'] in bib_keys:
+                    bib_keys.remove(d['ID'])
+            except Exception as e:
+                print(f"\n\nError article --->  {d['ID']}\n")
+                raise e
 
     print('--------------------\n\n')
 
@@ -105,12 +109,16 @@ def main():
     # 爬取剩下没有在exclude_file中的bibkey
     for d in bibdata.entries:
         if d['ID'] in bib_keys:
-            bibdata_out.entries.append(d)
-            entity_check = check_entity(d)
-            entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
-            print('Success---->'+d['ID'], entity_check_consequence)
-            while d['ID'] in bib_keys:
-                bib_keys.remove(d['ID'])
+            try:
+                bibdata_out.entries.append(d)
+                entity_check = check_entity(d)
+                entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
+                print('Success---->'+d['ID'], entity_check_consequence)
+                while d['ID'] in bib_keys:
+                    bib_keys.remove(d['ID'])
+            except Exception as e:
+                print(f"\n\nError article --->  {d['ID']}\n")
+                raise e
 
 
     print('--------------------\n\n')
