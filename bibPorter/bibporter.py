@@ -1,5 +1,6 @@
 import bibtexparser as bp
 from bibtexparser.bparser import BibTexParser
+from bibtexparser.bibdatabase import UndefinedString
 import os
 import argparse
 from util import modify_bibs, get_bibinfo, get_tex_file, check_entity
@@ -87,8 +88,13 @@ def main():
     exclude_file = args.exclude if args.exclude else "reference_fix.bib"
     exclude_file_path = os.path.join(tex_dir, exclude_file)
     with open(exclude_file_path) as ex_f:
-        exclude_data = bp.load(ex_f)
-    
+        try:
+            exclude_data = bp.load(ex_f)
+        except UndefinedString as e:
+            print(f'\n\033[31mError ====> {exclude_file} has undefined String：{e} \033[0m')
+            exit(-1)
+
+
     for d in exclude_data.entries:
         if d['ID'] in bib_keys:
             try:
