@@ -91,15 +91,15 @@ def main():
         try:
             exclude_data = bp.load(ex_f)
         except UndefinedString as e:
-            print(f'\n\033[31mError ====> {exclude_file} has undefined String：{e} \033[0m')
+            print(f'\n\033[31m Error ====> {exclude_file} has undefined String：{e} \033[0m')
             exit(-1)
 
-
+    # 对自定义bib文件的bib item进行格式排查
     for d in exclude_data.entries:
         if d['ID'] in bib_keys:
             try:
                 # excluded_keys.add(d['ID'])
-                bibdata_out.entries.append(d)
+                # bibdata_out.entries.append(d)
                 entity_check = check_entity(d)
                 entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
                 print('Excluded---->'+d['ID'], entity_check_consequence)
