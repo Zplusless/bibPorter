@@ -87,7 +87,7 @@ def main():
     excluded_keys = set()
     exclude_file = args.exclude if args.exclude else "reference_fix.bib"
     exclude_file_path = os.path.join(tex_dir, exclude_file)
-    with open(exclude_file_path) as ex_f:
+    with open(exclude_file_path, encoding='utf8') as ex_f:
         try:
             exclude_data = bp.load(ex_f)
         except UndefinedString as e:
