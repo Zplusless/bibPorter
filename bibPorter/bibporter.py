@@ -1,3 +1,9 @@
+# 避免在任何的输出中出现中文，避免vscode的output面板中出现乱码
+
+
+
+
+
 import bibtexparser as bp
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.bibdatabase import UndefinedString
@@ -87,27 +93,36 @@ def main():
     excluded_keys = set()
     exclude_file = args.exclude if args.exclude else "reference_fix.bib"
     exclude_file_path = os.path.join(tex_dir, exclude_file)
-    with open(exclude_file_path, encoding='utf8') as ex_f:
-        try:
-            exclude_data = bp.load(ex_f)
-        except UndefinedString as e:
-            print(f'\n\033[31m Error ====> {exclude_file} has undefined String：{e} \033[0m')
-            exit(-1)
 
-    # 对自定义bib文件的bib item进行格式排查
-    for d in exclude_data.entries:
-        if d['ID'] in bib_keys:
+    # 检查fix文件是否存在
+    if exclude_file not in os.listdir(tex_dir):
+        print(f'\n\033[31m Info ====> {exclude_file} cannot be found \033[0m')
+        fix_not_exist = True
+    # 如果fix文件存在，才进行排除操作
+    else:
+        fix_not_exist = False
+        with open(exclude_file_path, encoding='utf8') as ex_f:
             try:
-                # excluded_keys.add(d['ID'])
-                # bibdata_out.entries.append(d)
-                entity_check = check_entity(d)
-                entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
-                print('Excluded---->'+d['ID'], entity_check_consequence)
-                while d['ID'] in bib_keys:
-                    bib_keys.remove(d['ID'])
-            except Exception as e:
-                print(f"\n\nError article --->  {d['ID']}\n")
-                raise e
+                exclude_data = bp.load(ex_f)
+            except UndefinedString as e:
+                print(f'\n\033[31m Error ====> {exclude_file} has undefined String：{e} \033[0m')
+                exit(-1)
+
+
+        # 对自定义bib文件的bib item进行格式排查
+        for d in exclude_data.entries:
+            if d['ID'] in bib_keys:
+                try:
+                    # excluded_keys.add(d['ID'])
+                    # bibdata_out.entries.append(d)
+                    entity_check = check_entity(d)
+                    entity_check_consequence = '---->title: '+ re.sub(r'[{}]','', d['title']) +'\n\t\t|--->missing item: '+ str(entity_check) if entity_check else ''
+                    print('Excluded---->'+d['ID'], entity_check_consequence)
+                    while d['ID'] in bib_keys:
+                        bib_keys.remove(d['ID'])
+                except Exception as e:
+                    print(f"\n\nError article --->  {d['ID']}\n")
+                    raise e
 
     print('--------------------\n\n')
 
@@ -139,6 +154,9 @@ def main():
     print('------------end---------------')
 
     print('Success: {}, Fail: {}'.format(num_all-num_not_found, num_not_found))
+
+    if fix_not_exist:
+        print(f'\nInfo ====> no fixed bib item excluded, {exclude_file} cannot be found')
 
     # print(bibdata_out)
     with open(output_bib, 'w', encoding='utf8') as bib_write:
