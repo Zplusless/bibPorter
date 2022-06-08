@@ -16,7 +16,8 @@ dist
 *.fdb_latexmk
 .ropeproject
 bibporter_config.json
-bibPorter/bibporter.spec
+*.spec
 test/ieee/reference.bib
 .vscode/settings.json
 *.url
+
