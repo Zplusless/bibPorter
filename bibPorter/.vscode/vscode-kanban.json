@@ -4,6 +4,23 @@
       "assignedTo": {
         "name": "Zplusless"
       },
+      "creation_time": "2022-08-11T12:37:56.414Z",
+      "details": {
+        "content": "对常见的会议内置会议名称的格式，\n拿到会议的item\n1. 去除多余的{}\n2. 查找关键字,例如 infocom的全称\n3. 把会议名称改成标准的proceedings of..., 带缩写",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "references": [],
+      "title": "会议文献格式纠正"
+    }
+  ],
+  "in-progress": [],
+  "testing": [],
+  "done": [
+    {
+      "assignedTo": {
+        "name": "Zplusless"
+      },
       "creation_time": "2020-11-12T07:37:11.049Z",
       "description": {
         "content": "检查是否在同路径下的其它bib文件中",
@@ -13,8 +30,5 @@
       "references": [],
       "title": "增加对不在zotero中的bibikeys的排查"
     }
-  ],
-  "in-progress": [],
-  "testing": [],
-  "done": []
+  ]
 }
